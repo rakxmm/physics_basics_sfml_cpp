@@ -1,6 +1,48 @@
-cmake_minimum_required(VERSION 3.31)
-project(physics_basics_sfml_cpp)
+# Windows
+cmake_minimum_required(VERSION 3.16)
+project(Physics_Engine)
 
-set(CMAKE_CXX_STANDARD 26)
+set(CMAKE_CXX_STANDARD 20)
 
-add_executable(physics_basics_sfml_cpp main.cpp)
+set(SFML_INCLUDE_DIR "C:/SFML/include")
+set(SFML_LIB_DIR "C:/SFML/lib")
+
+
+add_executable(Physics_Engine main.cpp
+        GameObj.cpp
+        GameObj.h)
+
+target_include_directories(Physics_Engine PRIVATE
+        ${SFML_INCLUDE_DIR}
+        headers
+)
+
+target_link_directories(Physics_Engine PRIVATE ${SFML_LIB_DIR})
+
+# Link libraries (add -d for Debug builds)
+target_link_libraries(Physics_Engine PRIVATE
+        sfml-graphics
+        sfml-window
+        sfml-system
+)
+
+#############################################################
+
+
+## Linux
+#cmake_minimum_required(VERSION 3.16)
+#project(SFMLTest)
+#
+#set(CMAKE_CXX_STANDARD 17)
+#
+#include_directories(/usr/local/include)
+#link_directories(/usr/local/lib)
+#
+#add_executable(SFMLTest main.cpp)
+#
+#target_link_libraries(SFMLTest
+#        sfml-graphics
+#        sfml-window
+#        sfml-system
+#)
+#############################################################
