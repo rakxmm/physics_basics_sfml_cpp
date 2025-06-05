@@ -13,6 +13,7 @@ GameObj::GameObj(sf::Vector2f position, sf::Vector2f size, float mass, float gro
     this->ground_level = ground_level;
     this->rect.setSize(size);
     this->rect.setFillColor(sf::Color::Green);
+    this->rect.setPosition(this->position);
 }
 
 
