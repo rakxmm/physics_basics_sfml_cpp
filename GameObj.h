@@ -11,34 +11,23 @@
 class GameObj {
 public:
     sf::Vector2f position;
-
     sf::Vector2f size;
     sf::Vector2f velocity;
-    float mass;
-    float ground_level;
 
-    sf::RectangleShape rect;
+    int id;
+    float ground_level = 400;
+    bool active = false;
 
+    float gravity_force = 981.f;
 
-    GameObj(sf::Vector2f position, sf::Vector2f size, float mass, float ground_level);
+    GameObj(int id,  sf::Vector2f position, sf::Vector2f size);
 
     void update(float deltaTime);
 
-    void draw(sf::RenderWindow& window);
+    bool collide(const GameObj* game_obj) const;
 
-    sf::Vector2i getGridPosition(int square_width, int square_height);
+    void draw(sf::RenderWindow& window, sf::RectangleShape* rectangle) const;
 
-    bool collide(GameObj* obj);
-
-    void setPosition(sf::Vector2f position);
-
-    float bottom();
-
-    float top();
-
-    float right();
-
-    float left();
 };
 
 

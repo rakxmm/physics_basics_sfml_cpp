@@ -5,24 +5,33 @@
 
 int main() {
     sf::RenderWindow window(sf::VideoMode({600, 400}), "Physics Engine");
-
+    window.setFramerateLimit(180);
     sf::Clock clock;
+    sf::Clock fpsClock;
     std::vector<GameObj*> game_objs;
 
+    sf::RectangleShape rectangle({10, 10});
+    rectangle.setFillColor(sf::Color::Green);
 
-    std::vector<std::vector<std::vector<GameObj*>>> game_objs_grid;
 
-    int grid_height = window.getSize().y / 50;
-    int grid_width = window.getSize().x / 50;
-    game_objs_grid.resize(grid_height);
-    for (auto& grid_col : game_objs_grid) {
-        grid_col.resize(grid_width);
+    sf::Font font;
+    if (!font.openFromFile("fonts/AnakPaud.ttf")) {
+        std::cerr << "Font file was not found!" << std::endl;
     }
+    sf::Text text(font);
+    text.setFillColor(sf::Color::Red);
+    text.setPosition({0.f, 0.f});
+    text.setCharacterSize(13);
 
 
-    window.setFramerateLimit(180);
+    int click = 0;
+
+    int fps = 0;
+    int fps_count = 0;
     while (window.isOpen()) {
         float deltaTime = clock.restart().asSeconds();
+        window.clear(sf::Color::Black);
+
         while (auto event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
                 for (GameObj* obj : game_objs) {
@@ -33,11 +42,11 @@ int main() {
             if (auto mouse = event->getIf<sf::Event::MouseButtonPressed>()) {
                 if (mouse->button == sf::Mouse::Button::Left) {
                     auto pos = mouse->position;
+                    click++;
                     pos.x -= 5;
                     pos.y -= 5;
 
-                    auto obj = new GameObj(sf::Vector2f(pos), {10.f, 10.f}, 10.f, 400);
-
+                    auto* obj = new GameObj(click, sf::Vector2f(pos), {10, 10});
                     std::cout << "New object has been created on position: {x: " << pos.x << " y: " << pos.y << "}" << std::endl;
                     game_objs.push_back(obj);
                 }
@@ -45,65 +54,29 @@ int main() {
 
 
         }
+        fps_count++;
 
-        for (auto& grid_col : game_objs_grid) {
-            grid_col.clear();
+        if (fpsClock.getElapsedTime().asSeconds() >= .5f) {
+            fps = 2 * fps_count;
+            std::cout << "FPS: " << fps << std::endl;
+            fps_count = 0;
+            fpsClock.restart();
         }
 
-        window.clear(sf::Color::Black);
-
-        for (int index = 0; index < game_objs.size(); ) {
-            GameObj* obj = game_objs[index];
-
-            const int row = obj->getGridPosition(50, 50).y;
-            const int col = obj->getGridPosition(50, 50).x;
-            if (row >= 0 && row < grid_height && col >= 0 && col < grid_width) {
-                game_objs_grid[row][col].push_back(obj);
-                index++;
-            } else {
-                delete obj;
-                game_objs.erase(game_objs.begin() + index);
-                continue;
-            }
-
-            obj->draw(window);
-            obj->update(deltaTime);
-
-            for (int i = -1; i <= 1; i++) {
-                for (int j = -1; j <= 1; j++) {
-                    int nx = col + j;
-                    int ny = row + i;
-
-                    if (nx >= 0 &&
-                        ny >= 0 &&
-                        nx < grid_width &&
-                        ny < grid_height) {
-
-                        auto& grid_cell = game_objs_grid[ny][nx];
-
-                        for (GameObj* neighbor : grid_cell) {
-                            if (obj != neighbor) {
-                                if (obj->collide(neighbor)) {
-                                    float overlapX = (obj->position.x + obj->size.x) - neighbor->position.x;
-                                    float overlapY = (obj->position.y + obj->size.y) - neighbor->position.y;
-
-                                    if (std::abs(overlapX) < std::abs(overlapY)) {
-                                        obj->position -= sf::Vector2f(overlapX / 2, 0);
-                                        neighbor->position += sf::Vector2f(overlapX / 2, 0);
-                                    } else {
-                                        obj->position -= sf::Vector2f(0, overlapY / 2);
-                                        neighbor->position += sf::Vector2f(0, overlapY / 2);
-                                    }
 
 
-                                }
-                            }
+       for (GameObj* obj : game_objs) {
+           obj->update(deltaTime);
 
-                        }
-                    }
-                }
-            }
-        }
+
+
+
+
+
+           obj->draw(window, &rectangle);
+       }
+        text.setString("FPS: " + std::to_string(fps));
+        window.draw(text);
 
 
 
