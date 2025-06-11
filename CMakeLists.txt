@@ -10,7 +10,9 @@ set(SFML_LIB_DIR "C:/SFML/lib")
 
 add_executable(Physics_Engine main.cpp
         GameObj.cpp
-        GameObj.h)
+        GameObj.h
+        Chunk.cpp
+        Chunk.h)
 
 target_include_directories(Physics_Engine PRIVATE
         ${SFML_INCLUDE_DIR}
@@ -31,16 +33,20 @@ target_link_libraries(Physics_Engine PRIVATE
 
 ## Linux
 #cmake_minimum_required(VERSION 3.16)
-#project(SFMLTest)
+#project(Physics_Engine)
 #
 #set(CMAKE_CXX_STANDARD 17)
 #
 #include_directories(/usr/local/include)
 #link_directories(/usr/local/lib)
 #
-#add_executable(SFMLTest main.cpp)
+#add_executable(Physics_Engine main.cpp
+#        GameObj.cpp
+#        GameObj.h
+#        Chunk.cpp
+#        Chunk.h)
 #
-#target_link_libraries(SFMLTest
+#target_link_libraries(Physics_Engine
 #        sfml-graphics
 #        sfml-window
 #        sfml-system

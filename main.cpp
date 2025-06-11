@@ -29,6 +29,7 @@ int main() {
     int fps = 0;
     int fps_count = 0;
     while (window.isOpen()) {
+
         float deltaTime = clock.restart().asSeconds();
         window.clear(sf::Color::Black);
 
@@ -42,44 +43,38 @@ int main() {
             if (auto mouse = event->getIf<sf::Event::MouseButtonPressed>()) {
                 if (mouse->button == sf::Mouse::Button::Left) {
                     auto pos = mouse->position;
-                    click++;
                     pos.x -= 5;
                     pos.y -= 5;
+
+                    click++;
 
                     auto* obj = new GameObj(click, sf::Vector2f(pos), {10, 10});
                     std::cout << "New object has been created on position: {x: " << pos.x << " y: " << pos.y << "}" << std::endl;
                     game_objs.push_back(obj);
                 }
             }
-
-
         }
+
         fps_count++;
 
         if (fpsClock.getElapsedTime().asSeconds() >= .5f) {
             fps = 2 * fps_count;
-            std::cout << "FPS: " << fps << std::endl;
             fps_count = 0;
             fpsClock.restart();
         }
 
 
 
-       for (GameObj* obj : game_objs) {
-           obj->update(deltaTime);
+        for (GameObj* obj : game_objs) {
+            obj->update(deltaTime);
 
 
 
+            obj->draw(window, &rectangle);
+        }
 
-
-
-           obj->draw(window, &rectangle);
-       }
         text.setString("FPS: " + std::to_string(fps));
         window.draw(text);
-
-
-
 
 
         window.display();

@@ -6,6 +6,7 @@
 #define GAMEOBJ_H
 
 #include <SFML/Graphics.hpp>
+#include "Chunk.h"
 
 
 class GameObj {
@@ -28,6 +29,7 @@ public:
 
     void draw(sf::RenderWindow& window, sf::RectangleShape* rectangle) const;
 
+    void checkCollisions(Chunk* chunk);
 };
 
 
