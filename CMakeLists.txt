@@ -11,8 +11,8 @@ set(SFML_LIB_DIR "C:/SFML/lib")
 add_executable(Physics_Engine main.cpp
         GameObj.cpp
         GameObj.h
-        Chunk.cpp
-        Chunk.h)
+        Grid.cpp
+        Grid.h)
 
 target_include_directories(Physics_Engine PRIVATE
         ${SFML_INCLUDE_DIR}
@@ -42,9 +42,7 @@ target_link_libraries(Physics_Engine PRIVATE
 #
 #add_executable(Physics_Engine main.cpp
 #        GameObj.cpp
-#        GameObj.h
-#        Chunk.cpp
-#        Chunk.h)
+#        GameObj.h)
 #
 #target_link_libraries(Physics_Engine
 #        sfml-graphics
