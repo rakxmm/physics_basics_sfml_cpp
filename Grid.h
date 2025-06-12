@@ -45,13 +45,7 @@ struct Grid {
         return position.x >= 0 && position.y >= 0 && position.x < cols && position.y < rows;
     }
 
-    ~Grid() {
-        for (auto row : grid) {
-            for (GameObj* obj : row) {
-                delete obj;
-            }
-        }
-    }
+
 
 };
 

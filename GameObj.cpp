@@ -47,8 +47,6 @@ void GameObj::update(float deltaTime, Grid &grid) {
                         moved = true;
                         break;
                     }
-
-
                 }
 
                 if (not moved) {

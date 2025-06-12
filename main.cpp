@@ -15,8 +15,8 @@ int main() {
     sf::Clock fpsClock;
     std::vector<GameObj*> game_objs;
 
-    sf::RectangleShape rectangle({10, 10});
-    rectangle.setFillColor(sf::Color::Green);
+    sf::RectangleShape sand({10, 10});
+    sand.setFillColor(sf::Color::Yellow);
 
     int grid_square_size = 10;
 
@@ -51,25 +51,26 @@ int main() {
         while (auto event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
                 for (GameObj* obj : game_objs) {
-                    delete obj;
+                    if (obj) {
+                        auto gp = obj->getGridPosition();
+                        if (grid.isValid(gp) && grid.at(gp) == obj) {
+                            grid.at(gp) = nullptr;
+                        }
+                        delete obj;
+                    }
                 }
                 window.close();
             }
-            if (auto mouse = event->getIf<sf::Event::MouseButtonPressed>()) {
-                if (mouse->button == sf::Mouse::Button::Left) {
-                    auto pos = mouse->position;
+        }
 
-                    pos /= grid_square_size;
-
-
-                    if (grid.isEmpty(pos)) {
-                        pos *= grid_square_size;
-                        obj_count++;
-                        auto* obj = new GameObj(obj_count, pos, {10, 10});
-                        // std::cout << "New object has been created on position: {x: " << pos.x << " y: " << pos.y << "}" << std::endl;
-                        game_objs.push_back(obj);
-                    }
-                }
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+            auto pos = sf::Mouse::getPosition(window);
+            pos /= grid_square_size;
+            if (grid.isValid(pos) && grid.isEmpty(pos)) {
+                pos *= grid_square_size;
+                obj_count++;
+                auto* obj = new GameObj(obj_count, pos, {10, 10});
+                game_objs.push_back(obj);
             }
         }
 
@@ -87,12 +88,8 @@ int main() {
 
 
 
-            obj->draw(window, &rectangle);
+            obj->draw(window, &sand);
         }
-
-
-
-
 
 
         // To draw FPS on screen.
