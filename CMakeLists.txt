@@ -17,6 +17,8 @@ add_executable(Physics_Engine main.cpp
         Stone.h
         Sand.cpp
         Sand.h
+        Water.cpp
+        Water.h
 )
 
 target_include_directories(Physics_Engine PRIVATE

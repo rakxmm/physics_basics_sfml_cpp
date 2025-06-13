@@ -5,6 +5,7 @@
 #include "Grid.h"
 #include "Sand.h"
 #include "Stone.h"
+#include "Water.h"
 
 enum class ObjType {
     STONE,
@@ -28,6 +29,9 @@ int main() {
     sand.setFillColor(sf::Color::Yellow);
     sf::RectangleShape stone({10, 10});
     stone.setFillColor(sf::Color::White);
+
+    sf::RectangleShape water({10, 10});
+    water.setFillColor(sf::Color::Blue);
 
     int grid_square_size = 10;
 
@@ -72,9 +76,17 @@ int main() {
                     switch (key->scancode) {
                         case sf::Keyboard::Scancode::Q:
                             selected = ObjType::STONE;
+                            std::cout << "You have selected STONE \n";
                             break;
                         case sf::Keyboard::Scancode::W:
                             selected = ObjType::SAND;
+                            std::cout << "You have selected SAND \n";
+
+                            break;
+                        case sf::Keyboard::Scancode::E:
+                            selected = ObjType::WATER;
+                            std::cout << "You have selected WATER \n";
+
                             break;
                         default: break;
                     }
@@ -98,6 +110,10 @@ int main() {
                     case ObjType::STONE:
                         obj = new Stone(obj_count, pos, {10, 10}, &stone);
                         break;
+                    case ObjType::WATER:
+                        obj = new Water(obj_count, pos, {10, 10}, &water);
+                        break;
+                        default: break;
                 }
 
                 game_objs.push_back(obj);
