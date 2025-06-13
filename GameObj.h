@@ -16,19 +16,20 @@ public:
     sf::Vector2i grid_position;
     sf::Vector2f size;
     sf::Vector2f velocity;
+    sf::RectangleShape* rectangle;
 
     int id;
     float ground_level = 400;
 
     float gravity_force = 1500.f;
 
-    GameObj(int id, sf::Vector2i position, sf::Vector2f size);
+    GameObj(int id, sf::Vector2i position, sf::Vector2f size, sf::RectangleShape* rectangle);
 
-    void update(float deltaTime, Grid &grid);
+    virtual void update(float deltaTime, Grid &grid);
 
     bool collide(const GameObj* game_obj) const;
 
-    void draw(sf::RenderWindow& window, sf::RectangleShape* rectangle) const;
+    void draw(sf::RenderWindow& window) const;
 
     sf::Vector2i getGridPosition() const;
 };

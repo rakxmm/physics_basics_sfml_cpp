@@ -3,6 +3,15 @@
 #include <vector>
 #include "GameObj.h"
 #include "Grid.h"
+#include "Sand.h"
+#include "Stone.h"
+
+enum class ObjType {
+    STONE,
+    WATER,
+    SAND,
+    NONE
+};
 
 int main() {
     int win_x = 600;
@@ -17,16 +26,14 @@ int main() {
 
     sf::RectangleShape sand({10, 10});
     sand.setFillColor(sf::Color::Yellow);
+    sf::RectangleShape stone({10, 10});
+    stone.setFillColor(sf::Color::White);
 
     int grid_square_size = 10;
 
     Grid grid(win_y / grid_square_size, win_x / grid_square_size);
-
-
-
-
-
-
+    
+    ObjType selected = ObjType::NONE;
 
     sf::Font font;
     if (!font.openFromFile("fonts/AnakPaud.ttf")) {
@@ -60,16 +67,39 @@ int main() {
                     }
                 }
                 window.close();
+            } else if (auto* key = event->getIf<sf::Event::KeyPressed>()) {
+                if (key) {
+                    switch (key->scancode) {
+                        case sf::Keyboard::Scancode::Q:
+                            selected = ObjType::STONE;
+                            break;
+                        case sf::Keyboard::Scancode::W:
+                            selected = ObjType::SAND;
+                            break;
+                        default: break;
+                    }
+                }
+
             }
         }
 
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && selected != ObjType::NONE) {
             auto pos = sf::Mouse::getPosition(window);
             pos /= grid_square_size;
             if (grid.isValid(pos) && grid.isEmpty(pos)) {
+
                 pos *= grid_square_size;
                 obj_count++;
-                auto* obj = new GameObj(obj_count, pos, {10, 10});
+                GameObj* obj;
+                switch (selected) {
+                    case ObjType::SAND:
+                        obj = new Sand(obj_count, pos, {10, 10}, &sand);
+                        break;
+                    case ObjType::STONE:
+                        obj = new Stone(obj_count, pos, {10, 10}, &stone);
+                        break;
+                }
+
                 game_objs.push_back(obj);
             }
         }
@@ -88,7 +118,7 @@ int main() {
 
 
 
-            obj->draw(window, &sand);
+            obj->draw(window);
         }
 
 

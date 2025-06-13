@@ -12,7 +12,12 @@ add_executable(Physics_Engine main.cpp
         GameObj.cpp
         GameObj.h
         Grid.cpp
-        Grid.h)
+        Grid.h
+        Stone.cpp
+        Stone.h
+        Sand.cpp
+        Sand.h
+)
 
 target_include_directories(Physics_Engine PRIVATE
         ${SFML_INCLUDE_DIR}
